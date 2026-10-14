@@ -47,9 +47,10 @@ app = FastAPI(title="Marginalia")
 
 @app.get("/")
 def home():
-    index_file = ROOT / "static" / "index.html"
-    if index_file.exists():
-        return FileResponse(index_file)
+    # Works with either layout: static/index.html or index.html next to app.py
+    for index_file in (ROOT / "static" / "index.html", ROOT / "index.html"):
+        if index_file.exists():
+            return FileResponse(index_file)
     return {
         "message": "Marginalia API is running",
         "docs": "/docs",
