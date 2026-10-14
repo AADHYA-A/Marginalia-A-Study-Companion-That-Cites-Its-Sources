@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marginalia – source-cited study companion</title>
+<link href="https://fonts.googleapis.com/css2?family=Literata:wght@400;600&family=Archivo:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef1ee;--surf:#fbfcfa;--ink:#16212b;--mute:#5b6975;--line:#cdd5d0;--accent:#1f4e79;--hi:#ffe27a;--hi-ink:#4a3b00;--ok:#2e7d4f;--bad:#b3392f}
+@media (prefers-color-scheme:dark){:root{--bg:#10171d;--surf:#18222b;--ink:#e6ecef;--mute:#93a1ab;--line:#2c3a45;--accent:#8fc1ee;--hi:#5a4a0c;--hi-ink:#ffe9a0;--ok:#5fc08a;--bad:#ef8a80}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 Literata,Georgia,serif}
+button,input,.ui{font-family:Archivo,system-ui,sans-serif}
+header{padding:26px 24px 8px;max-width:1180px;margin:0 auto}
+h1{font:700 32px/1.1 Archivo,system-ui,sans-serif;margin:0;letter-spacing:-.02em}
+header p{margin:6px 0 0;color:var(--mute);max-width:62ch}
+main{max-width:1180px;margin:0 auto;padding:12px 24px 40px;display:grid;grid-template-columns:270px minmax(0,1fr) 220px;gap:20px}
+@media(max-width:960px){main{grid-template-columns:1fr}}
+.panel{background:var(--surf);border:1px solid var(--line);border-radius:6px;padding:16px;min-width:0}
+h2{font:600 15px/1.3 Archivo,system-ui,sans-serif;margin:0 0 10px}
+.list{max-height:330px;overflow:auto;margin-top:10px}
+.src{display:block;width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--line);padding:8px 0;color:var(--ink);cursor:pointer;font:400 13px/1.4 Literata,serif}
+.src b{font:600 12px Archivo,sans-serif;color:var(--accent);display:block}
+.src.on{background:var(--hi);color:var(--hi-ink);padding:8px}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.tabs{display:flex;gap:4px;margin-bottom:14px;flex-wrap:wrap}
+.tab{border:1px solid var(--line);background:var(--surf);color:var(--ink);padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600}
+.tab[aria-selected=true]{background:var(--accent);color:var(--surf);border-color:var(--accent)}
+.row{display:flex;gap:8px}
+input[type=text]{flex:1;min-width:0;padding:11px 12px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-size:16px}
+.btn{background:var(--accent);color:var(--surf);border:0;padding:10px 16px;border-radius:6px;font-weight:600;cursor:pointer}
+.ghost{background:none;color:var(--accent);border:1px solid var(--accent);padding:7px 12px;border-radius:6px;cursor:pointer;font-weight:600;font-size:13px;margin:4px 4px 0 0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.chip{font:400 13px Archivo,sans-serif;border:1px solid var(--line);background:none;color:var(--ink);border-radius:99px;padding:4px 11px;cursor:pointer}
+.quote{margin:12px 0;padding:2px 0 2px 14px;border-left:3px solid var(--hi);font-size:15px}
+.cite{font:600 12px Archivo,sans-serif;background:var(--hi);color:var(--hi-ink);border:0;border-radius:4px;padding:2px 7px;cursor:pointer;margin:0 2px}
+.meta{color:var(--mute);font-size:13px;font-family:Archivo,sans-serif}
+.opt{display:block;width:100%;text-align:left;margin:8px 0;padding:11px 13px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:6px;cursor:pointer;font:400 15px/1.4 Literata,serif}
+.opt.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 15%,var(--bg))}
+.opt.bad{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 15%,var(--bg))}
+.bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin:4px 0 12px}
+.bar i{display:block;height:100%;background:var(--accent);transition:width .4s}
+.lbl{font:400 13px Archivo,sans-serif;display:flex;justify-content:space-between;gap:8px}
+.fb{margin-top:12px;padding:12px;border-radius:6px;background:var(--bg)}
+.drop{border:2px dashed var(--line);border-radius:6px;padding:12px;font:400 13px Archivo,sans-serif;color:var(--mute);text-align:center}
+svg text{fill:var(--mute);font:12px Archivo,sans-serif}
+@media(prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+</head>
+<body>
+<header>
+<h1>Marginalia</h1>
+<p>Upload your lecture, textbook and slides. Ask questions and get answers that cite the exact minute, page or slide, then practice with a quiz that follows your gaps.</p>
+</header>
+<main>
+<aside class="panel" aria-label="Materials">
+<h2>Your materials</h2>
+<div class="drop">PDF textbook · PPTX slides · SRT/VTT/TXT transcript · MP3/MP4 (needs Whisper)<br>
+<input type="file" id="files" multiple accept=".pdf,.pptx,.srt,.vtt,.txt,.md,.mp3,.wav,.m4a,.mp4,.mov,.webm,.mkv" aria-label="Choose files" style="margin-top:8px;max-width:100%"></div>
+<button class="ghost" id="up">Add files</button><button class="ghost" id="smp">Load sample course</button><button class="ghost" id="rst">Clear all</button>
+<p class="meta" id="stat" aria-live="polite"></p>
+<div class="list" id="srcs"></div>
+</aside>
+<section class="panel">
+<div class="tabs" role="tablist">
+<button class="tab" role="tab" data-t="ask" aria-selected="true">Ask</button>
+<button class="tab" role="tab" data-t="quiz" aria-selected="false">Adaptive quiz</button>
+<button class="tab" role="tab" data-t="prog" aria-selected="false">Progress</button>
+</div>
+<div id="ask">
+<form id="f" class="row"><input type="text" id="q" aria-label="Question" placeholder="Ask about your materials…"><button class="btn" type="submit">Ask</button></form>
+<div id="ans" aria-live="polite"><p class="meta">Load the sample course or add your own files, then ask a question.</p></div>
+</div>
+<div id="quiz" hidden></div>
+<div id="prog" hidden></div>
+</section>
+<aside class="panel" aria-label="Mastery"><h2>Concept mastery</h2><div id="mast"></div></aside>
+</main>
+<script>
+const $=i=>document.getElementById(i),esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let ST={chunks:[],mastery:{},history:[],plan:[]},CUR=null;
+const api=async(p,o={})=>{const r=await fetch("/api/"+p,o);const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.detail||r.statusText);return j};
+const post=(p,b)=>api(p,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(b||{})});
+const status=m=>$("stat").textContent=m;
+const label=s=>`${s.type} ${s.ref}`;
+const cite=s=>`<button class="cite" data-id="${s.id}" title="${esc(s.source)}">${esc(label(s))}</button>`;
+function hl(id){document.querySelectorAll(".src").forEach(e=>e.classList.toggle("on",e.dataset.id==id));const e=document.querySelector(`.src[data-id="${id}"]`);if(e)e.scrollIntoView({block:"nearest"})}
+document.addEventListener("click",e=>{const t=e.target.closest(".cite,.src");if(t)hl(t.dataset.id)});
+function render(){
+ $("srcs").innerHTML=ST.chunks.map(c=>`<button class="src" data-id="${c.id}"><b>${esc(label(c))} · ${esc(c.source)}</b>${esc(c.text.slice(0,80))}…</button>`).join("");
+ const n=ST.chunks.length;if(n)status(`${n} passages from ${new Set(ST.chunks.map(c=>c.source)).size} file(s). Answers: ${ST.llm?"Claude, grounded in your sources":"quoted from sources (set ANTHROPIC_API_KEY for generated answers)"}.`);
+ const ks=Object.keys(ST.mastery);
+ $("mast").innerHTML=ks.length?ks.map(k=>`<div class="lbl"><span>${esc(k)}</span><span>${Math.round(ST.mastery[k]*100)}%</span></div><div class="bar"><i style="width:${ST.mastery[k]*100}%"></i></div>`).join(""):'<p class="meta">Concepts appear after you add materials.</p>';
+ progress()}
+function progress(){
+ const h=ST.history,W=520,H=170,p=30;let svg="";
+ if(h.length>1){const pts=h.map((d,i)=>`${p+i*(W-2*p)/(h.length-1)},${H-p-d.avg*(H-2*p)}`).join(" ");
+  svg=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Average mastery over time"><line x1="${p}" y1="${H-p}" x2="${W-p}" y2="${H-p}" stroke="var(--line)"/><line x1="${p}" y1="${p}" x2="${p}" y2="${H-p}" stroke="var(--line)"/><text x="2" y="${p+4}">100%</text><text x="8" y="${H-p+4}">0%</text><text x="${p}" y="${H-6}">answers →</text><polyline points="${pts}" fill="none" stroke="var(--accent)" stroke-width="3"/></svg>`}
+ else svg='<p class="meta">Answer a few quiz questions to see your mastery trend.</p>';
+ $("prog").innerHTML=`<h2>Average mastery over time</h2>${svg}<h2 style="margin-top:18px">Study plan</h2>`+(ST.plan.length?ST.plan.map(x=>`<div class="fb"><b>${esc(x.concept)}</b> <span class="meta">${Math.round(x.mastery*100)}% mastery. Re-read:</span>${x.sources.map(s=>`<div class="quote">${esc(s.text)} ${cite(s)}</div>`).join("")}<button class="ghost" data-focus="${esc(x.concept)}">Quiz me on this</button></div>`).join(""):'<p class="meta">Your plan appears once you have materials.</p>')}
+// tabs
+function show(t){["ask","quiz","prog"].forEach(k=>$(k).hidden=k!=t);document.querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-selected",b.dataset.t==t))}
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{show(b.dataset.t);if(b.dataset.t=="quiz"&&!CUR)nextQ()});
+document.addEventListener("click",e=>{const b=e.target.closest("[data-focus]");if(b){show("quiz");nextQ(b.dataset.focus)}});
+// files
+async function run(fn){try{status("Working…");ST=await fn();CUR=null;$("quiz").innerHTML="";render()}catch(e){status("Error: "+e.message)}}
+$("up").onclick=()=>{const fs=$("files").files;if(!fs.length)return status("Choose one or more files first.");const fd=new FormData();[...fs].forEach(f=>fd.append("files",f));run(()=>api("upload",{method:"POST",body:fd}))};
+$("smp").onclick=()=>run(()=>post("sample"));
+$("rst").onclick=()=>run(()=>post("reset"));
+// ask
+$("f").onsubmit=async e=>{e.preventDefault();const q=$("q").value.trim();if(!q)return;$("ans").innerHTML='<p class="meta">Searching your materials…</p>';
+ try{const r=await post("ask",{q});
+  const body=esc(r.answer).replace(/\[(\d+)\]/g,(m,n)=>r.sources[n-1]?cite(r.sources[n-1]):m);
+  $("ans").innerHTML=`<p>${body}</p>`+(r.sources.length?`<p class="meta">Sources used (${r.mode==="llm"?"answer written by Claude from these passages":"quoted directly"}):</p>`+r.sources.map(s=>`<div class="quote">${esc(s.text)} ${cite(s)}</div>`).join("")+`<button class="ghost" data-focus="${esc(r.sources[0].concept)}">Quiz me on ${esc(r.sources[0].concept)}</button>`:"");
+  if(r.sources[0])hl(r.sources[0].id)}catch(e){$("ans").innerHTML=`<p>${esc(e.message)}</p>`}};
+// quiz
+async function nextQ(focus){$("quiz").innerHTML='<p class="meta">Preparing a question…</p>';
+ try{CUR=await post("quiz/next",{concept:focus});const q=CUR;
+  $("quiz").innerHTML=`<p class="meta">${esc(q.concept)} · ${q.difficulty==1?"foundation":"stretch"} question</p><h2 style="font:600 18px/1.4 Literata,serif">${esc(q.q)}</h2>${q.options.map((o,i)=>`<button class="opt" data-i="${i}">${esc(o)}</button>`).join("")}<div id="fb"></div>`;
+  document.querySelectorAll(".opt").forEach(b=>b.onclick=()=>pick(+b.dataset.i))}catch(e){$("quiz").innerHTML=`<p>${esc(e.message)}</p>`}}
+async function pick(i){const q=CUR,ok=i==q.answer;
+ document.querySelectorAll(".opt").forEach((b,j)=>{b.disabled=true;if(j==q.answer)b.classList.add("ok");else if(j==i)b.classList.add("bad")});
+ ST=await post("quiz/answer",{concept:q.concept,correct:ok,difficulty:q.difficulty});render();
+ $("fb").innerHTML=`<div class="fb"><b>${ok?"Correct.":"Not quite."}</b> ${ok?"":`The answer is “${esc(q.options[q.answer])}”. `}Source: ${cite(q.source)}${ok?"":`<div class="quote">${esc(q.source.text)}</div>`}</div><p><button class="btn" id="nx">Next question</button></p>`;
+ $("nx").onclick=()=>nextQ();$("nx").focus()}
+api("state").then(s=>{ST=s;render()});
+</script>
+</body>
+</html>

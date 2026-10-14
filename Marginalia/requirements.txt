@@ -1,0 +1,10 @@
+fastapi>=0.110
+uvicorn[standard]>=0.29
+python-multipart>=0.0.9
+pypdf>=4.0
+python-pptx>=0.6.23
+scikit-learn>=1.4
+numpy>=1.26
+anthropic>=0.40
+# optional, for audio/video lectures (also needs ffmpeg):
+# faster-whisper
