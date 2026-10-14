@@ -95,3 +95,10 @@ marginalia/
 ## License
 
 MIT
+
+## Deploying (optional)
+
+The judging requirement is the public repo plus the demo video, so hosting is optional. If you want a live link:
+
+- **Use a persistent host** such as Render, Railway or Fly.io. Set the root directory to `backend`, the build command to `pip install -r requirements.txt`, and the start command to `uvicorn app:app --host 0.0.0.0 --port $PORT`. Add `ANTHROPIC_API_KEY` as an environment variable if you want Claude features.
+- **Vercel is not recommended.** It runs stateless serverless functions with a read-only filesystem, so uploaded materials and progress are lost between requests and cold starts. The app avoids crashing there but will not keep your data.
