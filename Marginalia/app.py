@@ -13,6 +13,7 @@ from pathlib import Path
 import numpy as np
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import KMeans
@@ -44,6 +45,16 @@ vec = None
 mat = None
 app = FastAPI(title="Marginalia")
 
+@app.get("/")
+def home():
+    index_file = ROOT / "static" / "index.html"
+    if index_file.exists():
+        return FileResponse(index_file)
+    return {
+        "message": "Marginalia API is running",
+        "docs": "/docs",
+        "state": "/api/state"
+    }
 
 def save():
     try:
