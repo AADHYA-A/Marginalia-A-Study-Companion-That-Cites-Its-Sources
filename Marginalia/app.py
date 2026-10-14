@@ -10,7 +10,11 @@ from sklearn.cluster import KMeans
 from sklearn.metrics.pairwise import cosine_similarity
 
 ROOT = Path(__file__).parent
-STORE = ROOT / "data" / "store.json"; STORE.parent.mkdir(exist_ok=True)
+# Serverless hosts (e.g. Vercel) have a read-only filesystem except /tmp.
+DATA = Path("/tmp/marginalia") if os.getenv("VERCEL") else ROOT / "data"
+try: DATA.mkdir(parents=True, exist_ok=True)
+except OSError: DATA = Path("/tmp")
+STORE = DATA / "store.json"
 MODEL = os.getenv("CLAUDE_MODEL", "claude-sonnet-5-5")
 client = None
 if os.getenv("ANTHROPIC_API_KEY"):
@@ -18,12 +22,16 @@ if os.getenv("ANTHROPIC_API_KEY"):
     client = anthropic.Anthropic()
 
 S = {"chunks": [], "mastery": {}, "history": []}
-if STORE.exists():
-    S = json.loads(STORE.read_text())
+try:
+    if STORE.exists(): S = json.loads(STORE.read_text())
+except Exception:
+    pass
 vec = mat = None
 app = FastAPI(title="Marginalia")
 
-def save(): STORE.write_text(json.dumps(S))
+def save():
+    try: STORE.write_text(json.dumps(S))
+    except OSError: pass  # keep working in memory if the disk is not writable
 def fmt(s): return f"{s // 60:02d}:{s % 60:02d}"
 def pub(c): return {k: c[k] for k in ("id", "type", "ref", "source", "text", "concept") if k in c}
 
